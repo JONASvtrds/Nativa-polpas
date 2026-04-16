@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nativa Polpas</title>
+    <title>Nativa Polpas - Oficial</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
@@ -15,13 +15,14 @@
             --card-bg: #fff;
             --danger: #e53935;
             --success: #43a047;
+            --purple-bank: #6200ee;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* Animações Globais */
-        .btn-anim { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
+        /* Animações */
+        .btn-anim { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; border: none; }
         .btn-anim:active { transform: scale(0.95); }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -33,134 +34,155 @@
         /* Onboarding */
         #onboarding { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, var(--primary), #5e35b1); color: white; text-align: center; }
         .logo-img { max-width: 250px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        input[type="text"] { padding: 15px; width: 80%; max-width: 300px; border-radius: 30px; border: none; font-size: 16px; text-align: center; margin-bottom: 20px; outline: none; }
-        button { background: var(--secondary); color: #000; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        
+        input[type="text"], input[type="number"], select, textarea { padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; font-family: inherit;}
+        .main-input { width: 80%; max-width: 300px; text-align: center; margin-bottom: 20px; }
+        .btn-main { background: var(--secondary); color: #000; padding: 15px 30px; border-radius: 30px; font-weight: 800; }
 
         /* Header */
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
         .header-logo { height: 50px; border-radius: 8px; }
-        .user-info { display: flex; flex-direction: column; }
-        .wallet { color: var(--success); font-weight: 800; font-size: 1.2rem; }
-        .header-actions button { margin-left: 5px; padding: 10px 15px; font-size: 14px; }
+        .wallet { color: var(--success); font-weight: 800; font-size: 1.1rem; }
+        .header-actions button { padding: 10px 15px; font-size: 14px; border-radius: 30px; margin-left: 5px; font-weight: bold;}
+
+        /* Aviso de Scroll */
+        #scroll-warning {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.7); color: white; padding: 10px 20px;
+            border-radius: 50px; z-index: 100; display: none; animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-10px);} 60% {transform: translateX(-50%) translateY(-5px);} }
 
         /* Produtos */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .product-card { background: var(--card-bg); border-radius: 20px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s; text-align: center; }
-        .product-card:hover { transform: translateY(-5px); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding-bottom: 50px; }
+        .product-card { background: var(--card-bg); border-radius: 20px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; }
         .product-img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-bottom: 10px; }
-        .product-card h3 { color: var(--primary); margin-bottom: 5px; }
-        .product-desc { font-size: 13px; color: #666; margin-bottom: 15px; min-height: 40px; }
+        .price-tag { font-size: 1.4rem; font-weight: 800; color: var(--success); margin: 5px 0 15px 0; }
+        .buy-btn { width: 100%; background: var(--primary); color: white; padding: 12px; border-radius: 12px; font-weight: bold; margin-bottom: 10px;}
+        
         .actions { display: flex; justify-content: space-between; margin-bottom: 15px; }
         .like-btn, .dislike-btn { background: #eee; padding: 8px; border-radius: 50%; font-size: 18px; width: 40px; height: 40px; }
         .like-btn.active { background: var(--success); color: white; }
         .dislike-btn.active { background: var(--danger); color: white; }
-        .buy-btn { width: 100%; background: var(--primary); color: white; margin-bottom: 10px; }
-        .comments-btn { width: 100%; background: #ccc; color: #333; }
+        .comments-btn { width: 100%; background: #ccc; color: #333; padding: 10px; border-radius: 12px; font-weight: bold; }
 
-        /* Moranguinho Tutorial */
-        #tutorial-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
-        .morango { width: 120px; height: 140px; background: #e53935; border-radius: 50% 50% 40% 40%; position: relative; margin-bottom: 30px; }
-        .morango::before { content: ''; position: absolute; top: -15px; left: 35px; width: 50px; height: 30px; background: #43a047; border-radius: 50% 50% 0 0; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
-        .olho { width: 20px; height: 25px; background: white; border-radius: 50%; position: absolute; top: 40px; }
-        .olho::after { content: ''; width: 8px; height: 8px; background: black; border-radius: 50%; position: absolute; top: 8px; left: 6px; }
+        /* Moranguinho */
+        #tutorial-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; }
+        .morango { width: 100px; height: 120px; background: #e53935; border-radius: 50% 50% 40% 40%; position: relative; }
+        .morango::before { content: ''; position: absolute; top: -12px; left: 30px; width: 40px; height: 25px; background: #43a047; border-radius: 50% 50% 0 0; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        .olho { width: 15px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 35px; }
+        .olho::after { content: ''; width: 6px; height: 6px; background: black; border-radius: 50%; position: absolute; top: 6px; left: 4px; }
         .olho.esq { left: 25px; } .olho.dir { right: 25px; }
-        .boca { width: 40px; height: 10px; background: #3e1010; position: absolute; bottom: 30px; left: 40px; border-radius: 10px; transition: 0.2s; }
-        .falando .boca { height: 25px; border-radius: 10px 10px 30px 30px; animation: falarAnim 0.3s infinite alternate; }
-        .triste .boca { height: 15px; border-radius: 30px 30px 10px 10px; transform: translateY(5px); }
-        .triste .olho::after { top: 12px; }
-        
-        @keyframes falarAnim { 0% { height: 10px; } 100% { height: 30px; } }
-        
-        .balao { background: white; padding: 20px; border-radius: 15px; max-width: 300px; text-align: center; position: relative; font-weight: bold; margin-bottom: 20px; min-height: 80px;}
-        .balao::after { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border-width: 0 10px 10px 10px; border-style: solid; border-color: transparent transparent white transparent; }
+        .boca { width: 30px; height: 6px; background: #3e1010; position: absolute; bottom: 25px; left: 35px; border-radius: 10px; transition: 0.2s; }
+        .falando .boca { height: 20px; animation: falar 0.3s infinite alternate; }
+        @keyframes falar { from { height: 5px; } to { height: 20px; } }
+        .balao { background: white; padding: 15px; border-radius: 15px; max-width: 280px; text-align: center; margin-bottom: 20px; font-weight: bold; position: relative; }
 
-        /* Modais (Config, Comentários, Mochila) */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 900; }
-        .modal.active { display: flex; }
-        .modal-content { background: var(--bg); width: 90%; max-width: 500px; border-radius: 20px; padding: 20px; max-height: 80vh; overflow-y: auto; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 15px; background: var(--danger); color: white; padding: 5px 10px; border-radius: 50%; font-weight: bold; }
+        /* Modais (Config, Comentários, Mochila, Pagamento) */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1500; }
+        .modal-content { background: white; width: 90%; max-width: 450px; padding: 25px; border-radius: 20px; position: relative; max-height: 85vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 15px; right: 15px; background: var(--danger); color: white; padding: 5px 10px; border-radius: 50%; font-weight: bold; z-index: 10; }
         
-        /* Comentários */
-        .comment-box { background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .payment-option { display: flex; align-items: center; gap: 15px; padding: 15px; border: 2px solid #eee; border-radius: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .payment-option:hover { border-color: var(--primary); background: #fdf0ff; }
+
+        /* Mochila & Comentários */
+        .mochila-item { display: flex; align-items: center; gap: 15px; background: #f9f9f9; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .mochila-item img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
+        
+        .comment-box { background: #f9f9f9; padding: 10px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .comment-header { font-weight: bold; color: var(--primary); display: flex; justify-content: space-between;}
         .stars { color: var(--secondary); }
         .add-comment { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .add-comment textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; resize: none; font-family: inherit;}
-        
-        /* Mochila */
-        .mochila-item { display: flex; align-items: center; gap: 15px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
-        .mochila-item img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
-        
-        /* Notificações */
-        #toast { visibility: hidden; min-width: 250px; background-color: var(--success); color: #fff; text-align: center; border-radius: 30px; padding: 16px; position: fixed; z-index: 1001; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: bold; }
+        .add-comment textarea { width: 100%; resize: none; }
+
+        /* Toast */
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--success); color: #fff; text-align: center; border-radius: 30px; padding: 16px; position: fixed; z-index: 4000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: bold; }
         #toast.show { visibility: visible; animation: fadeinToast 0.5s, fadeoutToast 0.5s 2.5s; }
         @keyframes fadeinToast { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
         @keyframes fadeoutToast { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+
+        /* Celular / Banco */
+        #phone-screen { 
+            width: 320px; height: 600px; background: url('https://tse4.mm.bing.net/th/id/OIP.mJu88m5d9Cou2Mbwmgko6QHaNK?rs=1&pid=ImgDetMain&o=7&rm=3'); 
+            background-size: cover; border: 12px solid #333; border-radius: 40px; position: relative; overflow: hidden; display: none;
+        }
+        .phone-header { height: 40px; display: flex; justify-content: space-between; padding: 10px 20px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; }
+        .app-icon { 
+            width: 65px; height: 65px; border-radius: 15px; cursor: pointer; 
+            background: white; display: flex; align-items: center; justify-content: center; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: absolute; bottom: 30px; left: 20px;
+            z-index: 5;
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        
+        #bank-app-ui { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #fff; display: none; flex-direction: column; z-index: 10;
+        }
+        .bank-header { background: var(--purple-bank); color: white; padding: 40px 20px 20px; }
+        .pix-area { padding: 20px; }
+        .pix-input { width: 100%; margin-bottom: 15px; }
+
+        /* Processamento */
+        #processing-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background:white;
+            display:none; flex-direction:column; align-items:center; justify-content:center; z-index:3000;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .success-check { font-size: 80px; color: var(--success); display: none; }
+
+        /* Foco Anel */
+        .focus-ring {
+            position: absolute; width: 85px; height: 85px; border: 4px solid var(--secondary);
+            border-radius: 20px; animation: pulse-ring 1.5s infinite; pointer-events: none;
+            display: none; bottom: 20px; left: 10px; z-index: 4;
+        }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.3); opacity: 0; } }
 
     </style>
 </head>
 <body>
 
     <div id="onboarding" class="screen active">
-        <img src="https://i.postimg.cc/pL66z36Z/Screenshot-20260416-090533-2.jpg" alt="Logo Nativa Poupas" class="logo-img">
-        <h2>Bem-vindo à Nativa Polpas!</h2>
-        <p style="margin-bottom: 20px; font-size: 14px;">As melhores polpas preparadas com carinho.</p>
-        <input type="text" id="userNameInput" placeholder="Digite seu nome para entrar" maxlength="20">
-        <button class="btn-anim" onclick="entrar()">Entrar no Paraíso das Polpas</button>
+        <img src="https://i.postimg.cc/pL66z36Z/Screenshot-20260416-090533-2.jpg" class="logo-img">
+        <h1 style="margin-bottom: 10px;">Nativa Polpas</h1>
+        <input type="text" id="userNameInput" class="main-input" placeholder="Seu nome aqui...">
+        <button class="btn-anim btn-main" onclick="entrar()">COMEÇAR AGORA</button>
     </div>
 
     <div id="loja" class="screen">
         <header>
-            <img src="https://i.postimg.cc/pL66z36Z/Screenshot-20260416-090533-2.jpg" alt="Logo Nativa Poupas" class="header-logo">
-            <div class="user-info">
-                <span id="welcomeName">Olá, Visitante!</span>
-                <span class="wallet">Saldo: R$ ∞</span>
+            <img src="https://i.postimg.cc/pL66z36Z/Screenshot-20260416-090533-2.jpg" class="header-logo">
+            <div style="flex-grow: 1; padding: 0 15px;">
+                <div id="welcomeName" style="font-weight: bold;">Olá!</div>
+                <div class="wallet">Saldo: R$ ∞</div>
             </div>
             <div class="header-actions">
-                <button class="btn-anim" style="background: var(--secondary);" onclick="abrirMochila()">🎒 Mochila</button>
-                <button class="btn-anim" onclick="abrirConfig()">⚙️ Config</button>
+                <button class="btn-anim" style="background: var(--secondary); color: black;" onclick="abrirMochila()">🎒 Mochila</button>
+                <button class="btn-anim" style="background: #e0e0e0; color: black;" onclick="abrirConfig()">⚙️ Config</button>
             </div>
         </header>
-
-        <h2 id="tituloLoja" style="margin-bottom: 20px;">Nossas Polpas</h2>
-        <div class="products-grid" id="gridProdutos">
-            </div>
+        
+        <h2 id="tituloLoja" style="margin-bottom: 20px;">Nossas Polpas Especiais</h2>
+        <div class="products-grid" id="gridProdutos"></div>
     </div>
+
+    <div id="scroll-warning">👇 Arraste para ver nossos produtos</div>
 
     <div id="tutorial-overlay">
-        <div class="balao" id="texto-morango">Olá! Preparando o sistema...</div>
+        <div class="balao" id="texto-morango">Olá!</div>
         <div class="morango" id="morango-personagem">
-            <div class="olho esq"></div>
-            <div class="olho dir"></div>
-            <div class="boca"></div>
+            <div class="olho esq"></div><div class="olho dir"></div><div class="boca"></div>
         </div>
-        <button class="btn-anim" style="background: var(--danger); color: white; margin-top: 20px;" onclick="calarBoca()">Cala a boca</button>
-    </div>
-
-    <div id="modal-comentarios" class="modal">
-        <div class="modal-content">
-            <button class="btn-anim close-modal" onclick="fecharModal('modal-comentarios')">X</button>
-            <h2 id="titulo-comentarios" style="margin-bottom: 15px;">Comentários</h2>
-            <div id="lista-comentarios" style="max-height: 300px; overflow-y: auto;"></div>
-            
-            <div class="add-comment">
-                <h4>Deixe sua avaliação, <span class="nome-usuario-span"></span>!</h4>
-                <select id="nota-estrela" style="padding: 10px; border-radius: 10px;">
-                    <option value="5">⭐⭐⭐⭐⭐ Perfeito!</option>
-                    <option value="4">⭐⭐⭐⭐ Muito Bom</option>
-                    <option value="3">⭐⭐⭐ Legalzinho</option>
-                    <option value="2">⭐⭐ Ruim</option>
-                    <option value="1">⭐ Horrível</option>
-                </select>
-                <textarea id="texto-novo-comentario" rows="3" placeholder="Escreva o que achou..."></textarea>
-                <button class="btn-anim" style="background: var(--primary); color: white;" onclick="adicionarComentario()">Enviar Feedback</button>
-            </div>
-        </div>
+        <button class="btn-anim" style="background:var(--danger); color:white; padding:10px 20px; border-radius:20px; margin-top:15px;" onclick="calarBoca()">Cala a boca</button>
     </div>
 
     <div id="modal-mochila" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in">
             <button class="btn-anim close-modal" onclick="fecharModal('modal-mochila')">X</button>
             <h2 style="margin-bottom: 15px;" id="titulo-mochila">Sua Mochila</h2>
             <div id="lista-mochila"></div>
@@ -169,7 +191,7 @@
     </div>
 
     <div id="modal-config" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in">
             <button class="btn-anim close-modal" onclick="fecharModal('modal-config')">X</button>
             <h2 style="margin-bottom: 15px;">Configurações</h2>
             
@@ -178,260 +200,273 @@
             </div>
 
             <label style="font-weight: bold;">Idioma / Language:</label>
-            <select id="seletor-idioma" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 10px;" onchange="mudarIdioma(this.value)">
+            <select id="seletor-idioma" style="width: 100%; margin-top: 10px;" onchange="mudarIdioma(this.value)">
                 <option value="pt">Português (Brasil)</option>
                 <option value="en">English (Vai na fé)</option>
             </select>
         </div>
     </div>
 
+    <div id="modal-comentarios" class="modal">
+        <div class="modal-content fade-in">
+            <button class="btn-anim close-modal" onclick="fecharModal('modal-comentarios')">X</button>
+            <h2 id="titulo-comentarios" style="margin-bottom: 15px;">Comentários</h2>
+            <div id="lista-comentarios" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+            
+            <div class="add-comment">
+                <h4>Deixe sua avaliação, <span class="nome-usuario"></span>!</h4>
+                <select id="nota-estrela">
+                    <option value="5">⭐⭐⭐⭐⭐ Perfeito!</option>
+                    <option value="4">⭐⭐⭐⭐ Muito Bom</option>
+                    <option value="3">⭐⭐⭐ Legalzinho</option>
+                    <option value="2">⭐⭐ Ruim</option>
+                    <option value="1">⭐ Horrível</option>
+                </select>
+                <textarea id="texto-novo-comentario" rows="3" placeholder="Escreva o que achou..."></textarea>
+                <button class="btn-anim buy-btn" onclick="adicionarComentario()">Enviar Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-pagamento" class="modal">
+        <div class="modal-content fade-in">
+            <button class="btn-anim close-modal" onclick="fecharModal('modal-pagamento')">X</button>
+            <h3 style="margin-bottom:20px;">Como deseja pagar?</h3>
+            <div class="payment-option" onclick="payWithCard()">
+                <span style="font-size: 24px;">💳</span>
+                <div><b>Cartão de Crédito</b><br><small>Rápido e Seguro</small></div>
+            </div>
+            <div class="payment-option" onclick="payWithPix()">
+                <span style="font-size: 24px;">💎</span>
+                <div><b>PIX</b><br><small>Pague pelo ItaranaBank</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-cartao" class="modal">
+        <div class="modal-content fade-in">
+            <button class="btn-anim close-modal" onclick="fecharModal('modal-cartao')">X</button>
+            <h3>Dados do Cartão</h3>
+            <p style="font-size:12px; margin-bottom:15px; color:#666;">Seus dados são gerados e salvos para facilitar sua vida.</p>
+            <div id="card-display" style="background:#333; color:white; padding:20px; border-radius:15px; margin-bottom:20px;">
+                <div id="c-num" style="letter-spacing:2px; font-size:18px;">**** **** **** ****</div>
+                <div style="display:flex; justify-content:space-between; margin-top:15px;">
+                    <div id="c-val">00/00</div>
+                    <div id="c-cvv">***</div>
+                </div>
+            </div>
+            <button class="buy-btn" onclick="finalizarPagamento()">PAGAR AGORA</button>
+        </div>
+    </div>
+
+    <div id="modal-pix-chave" class="modal">
+        <div class="modal-content fade-in">
+            <button class="btn-anim close-modal" onclick="fecharModal('modal-pix-chave')">X</button>
+            <h3>Gerando Chave PIX</h3>
+            <div id="pix-loader" style="text-align:center; padding:20px;">
+                <div class="spinner" style="margin: 0 auto;"></div>
+                <p style="margin-top:10px;">Aguarde 5s...</p>
+            </div>
+            <div id="pix-ready" style="display:none;">
+                <div style="background:#f0f0f0; padding:15px; border-radius:10px; word-break:break-all; font-family:monospace;" id="chave-texto"></div>
+                <button class="buy-btn" style="margin-top:15px;" onclick="copiarPix()">COPIAR CHAVE</button>
+                <button id="btn-ir-celular" class="btn-anim" style="display:none; width:100%; padding:12px; background:var(--secondary); font-weight:bold; border-radius:12px;" onclick="simularCelular()">ABRIR CELULAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="phone-container" class="modal">
+        <div id="phone-screen">
+            <div class="phone-header">
+                <span id="phone-time">12:00</span>
+                <span>📶 🔋 100%</span>
+            </div>
+            
+            <div id="phone-desktop">
+                <div class="focus-ring" id="ring-app"></div>
+                <div class="app-icon" onclick="abrirBanco()">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD-6mz_od6R91A8vaGPxwUI4_24XD6f7dLaA&s" alt="ItaranaBank Logo">
+                </div>
+                <div style="position:absolute; bottom:15px; left:22px; color:white; font-size:10px; font-weight:bold;">ItaranaBank</div>
+            </div>
+
+            <div id="bank-app-ui">
+                <div class="bank-header">
+                    <h2>ItaranaBank</h2>
+                    <p>Olá, <span class="nome-usuario">Usuário</span></p>
+                    <h1 style="margin-top:10px;">R$ ∞</h1>
+                </div>
+                <div class="pix-area">
+                    <button class="buy-btn" id="btn-pix-app" onclick="showPixPaste()">PAGAR VIA PIX</button>
+                    <div id="pix-paste-area" style="display:none; margin-top:20px;">
+                        <input type="text" id="pix-input-app" class="pix-input" placeholder="Cole a chave aqui...">
+                        <button class="buy-btn" style="background:var(--purple-bank); pointer-events: auto; position: relative; z-index: 200;" onclick="confirmarPixApp()">CONTINUAR</button>
+                    </div>
+                </div>
+                <div id="bank-confirm" style="display:none; padding:20px;">
+                    <h3>Confirmar Pagamento</h3>
+                    <p>Para: <b>Nativa Polpas</b></p>
+                    <p>Valor: <b id="valor-pix-confirm" style="color:var(--success)">R$ 0,00</b></p>
+                    <button class="buy-btn" style="margin-top:20px; background:var(--success)" onclick="finalizarPagamento()">CONFIRMAR AGORA</button>
+                </div>
+            </div>
+
+            <div id="moranguinho-phone" style="position:absolute; bottom:120px; width:100%; display:none; flex-direction:column; align-items:center; z-index:100; pointer-events: none;">
+                <div class="balao" id="msg-phone" style="font-size:12px; padding:10px; pointer-events: auto;">Clique no app!</div>
+                <div class="morango" style="transform:scale(0.6)"><div class="olho esq"></div><div class="olho dir"></div><div class="boca"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="processing-overlay">
+        <div id="proc-content" style="text-align:center;">
+            <div class="spinner"></div>
+            <h3 style="margin-top:15px;">Processando Pagamento...</h3>
+        </div>
+        <div class="success-check" id="proc-success">✔</div>
+        <h3 id="proc-done-text" style="display:none; margin-top:20px;">Pagamento Concluído!</h3>
+    </div>
+
     <div id="toast">Ação realizada!</div>
 
     <script>
-        // --- DADOS DOS PRODUTOS ---
         const produtos = [
-            { id: 1, nome: "Polpa de Açaí", img: "https://i.postimg.cc/VN4PxKGr/Screenshot-20260416-090614-2.jpg", desc: "Extraída diretamente da Amazônia, processada a frio para manter a energia e o sabor original." },
-            { id: 2, nome: "Polpa de Maracujá", img: "https://i.postimg.cc/KYsxK9Pj/Screenshot-20260416-090556-2.jpg", desc: "Feita com polpa pura, sem sementes, garantindo aquele azedinho refrescante para acalmar o dia." },
-            { id: 3, nome: "Polpa de Manga", img: "https://i.postimg.cc/yds6CJyf/Screenshot-20260416-092202-2.jpg", desc: "Mangas selecionadas no ponto perfeito de maturação, trazendo um doce natural e textura cremosa." },
-            { id: 4, nome: "Polpa Mix de Frutas", img: "https://i.postimg.cc/sxCPpC72/Screenshot-20260416-101713-2.jpg", desc: "Uma explosão de vitaminas misturando as melhores frutas da estação, tudo batido em harmonia." },
-            { id: 5, nome: "Polpa de Goiaba", img: "https://i.postimg.cc/g27ZVPPP/Screenshot-20260416-101924-2.jpg", desc: "Goiabas vermelhas e suculentas, peneiradas meticulosamente para um suco encorpado e delicioso." },
-            { id: 6, nome: "Polpa de Acerola", img: "https://i.postimg.cc/FsBRqgCJ/Screenshot-20260416-102050-2.jpg", desc: "Super concentrada em Vitamina C. Colhida madura e processada rapidamente para não perder os nutrientes." }
+            { id: 1, nome: "Polpa de Açaí", preco: 22.00, img: "https://i.postimg.cc/VN4PxKGr/Screenshot-20260416-090614-2.jpg", desc: "Extraída diretamente da Amazônia, processada a frio." },
+            { id: 2, nome: "Polpa de Maracujá", preco: 16.00, img: "https://i.postimg.cc/KYsxK9Pj/Screenshot-20260416-090556-2.jpg", desc: "Feita com polpa pura, garantindo o azedinho refrescante." },
+            { id: 3, nome: "Polpa de Manga", preco: 14.50, img: "https://i.postimg.cc/yds6CJyf/Screenshot-20260416-092202-2.jpg", desc: "Mangas selecionadas no ponto perfeito de maturação." },
+            { id: 4, nome: "Polpa Mix de Frutas", preco: 25.00, img: "https://i.postimg.cc/sxCPpC72/Screenshot-20260416-101713-2.jpg", desc: "Uma explosão de vitaminas com as melhores frutas." },
+            { id: 5, nome: "Polpa de Goiaba", preco: 15.00, img: "https://i.postimg.cc/g27ZVPPP/Screenshot-20260416-101924-2.jpg", desc: "Goiabas vermelhas e suculentas para um suco encorpado." },
+            { id: 6, nome: "Polpa de Acerola", preco: 12.00, img: "https://i.postimg.cc/FsBRqgCJ/Screenshot-20260416-102050-2.jpg", desc: "Super concentrada em Vitamina C, colhida madura." }
         ];
 
-        // --- ESTADO DA APLICAÇÃO ---
-        let usuarioNome = "";
+        let user = "";
+        let currentProduct = null;
+        let isMuted = false;
         let mochila = [];
         let idioma = 'pt';
         let produtoAtualId = null;
-        let pularTutorialFlag = false;
 
-        // Base de comentários fakes ultra positivos
+        // Comentários Fakes Iniciais
         const nomesFakes = ["João Vitor", "Ana Paula", "Carlos E.", "Mariana", "Rafael", "Beatriz", "Lucas Silva", "Fernanda", "Pedro", "Juliana", "Marcos", "Letícia"];
-        const textosFakes = ["Simplesmente a melhor polpa que já tomei! Muito fresca.", "Nativa Poupas nunca decepciona, sabor incrível!", "Sabor puro da fruta, recomendo demais.", "Comprei ontem e já quero mais, qualidade nota 10.", "A cremosidade é surreal. Parabéns pelo produto!", "Melhor que fazer o suco da fruta na hora, muito prático e gostoso.", "Minha família toda adorou. Sensacional!", "Dinheiro infinito valeu a pena para comprar isso haha. Top!", "Sou cliente fiel, a textura é maravilhosa.", "Excelente, chegou super congelada e rendeu bastante."];
+        const textosFakes = ["Simplesmente a melhor polpa que já tomei! Muito fresca.", "Nativa Poupas nunca decepciona, sabor incrível!", "Sabor puro da fruta, recomendo demais.", "Comprei ontem e já quero mais, qualidade nota 10.", "A cremosidade é surreal. Parabéns pelo produto!", "Melhor que fazer o suco da fruta na hora.", "Minha família toda adorou. Sensacional!", "Dinheiro infinito valeu a pena haha. Top!", "Sou cliente fiel, a textura é maravilhosa.", "Excelente, chegou super congelada."];
 
-        // Inicializar comentários no LocalStorage caso não existam
         if (!localStorage.getItem('nativa_comments')) {
             let initialComments = {};
             produtos.forEach(p => {
                 initialComments[p.id] = [];
-                // Gerar 10 comentários fakes
                 for(let i=0; i<10; i++){
-                    initialComments[p.id].push({
-                        nome: nomesFakes[Math.floor(Math.random() * nomesFakes.length)],
-                        texto: textosFakes[Math.floor(Math.random() * textosFakes.length)],
-                        estrelas: 5,
-                        fake: true
-                    });
+                    initialComments[p.id].push({ nome: nomesFakes[Math.floor(Math.random() * nomesFakes.length)], texto: textosFakes[Math.floor(Math.random() * textosFakes.length)], estrelas: 5, fake: true });
                 }
             });
             localStorage.setItem('nativa_comments', JSON.stringify(initialComments));
         }
-
         if (!localStorage.getItem('nativa_likes')) localStorage.setItem('nativa_likes', JSON.stringify({}));
 
-        // --- FUNÇÕES PRINCIPAIS ---
-
+        // --- CORE ---
         function entrar() {
-            const input = document.getElementById('userNameInput').value.trim();
-            if (input === "") {
-                mostrarToast("Ei, digita um nome aí!");
-                return;
-            }
-            usuarioNome = input;
-            document.getElementById('welcomeName').innerText = `Olá, ${usuarioNome}!`;
-            document.querySelectorAll('.nome-usuario-span').forEach(el => el.innerText = usuarioNome);
+            user = document.getElementById('userNameInput').value.trim();
+            if(!user) return mostrarToast("Digite seu nome!");
             
+            document.querySelectorAll('.nome-usuario').forEach(el => el.innerText = user);
+            document.getElementById('welcomeName').innerText = `Olá, ${user}!`;
             document.getElementById('onboarding').classList.remove('active');
             iniciarTutorial();
         }
 
-        // --- MORANGUINHO & TUTORIAL ---
-        const falasTutorial = [
-            `E aí, {nome}! Bem-vindo à Nativa Poupas.`,
-            "Eu sou o Moranguinho, seu guia gostosão por aqui.",
-            "Aqui o bagulho é doido, seu dinheiro é infinito, R$ ∞ !!!",
-            "Pode comprar quantas polpas quiser clicando no botão comprar.",
-            "Deixe likes e comente nas polpas. Bora lá aproveitar!"
+        function renderizarLoja() {
+            const grid = document.getElementById('gridProdutos');
+            grid.innerHTML = '';
+            let likesSalvos = JSON.parse(localStorage.getItem('nativa_likes'));
+
+            produtos.forEach(p => {
+                const statusLike = likesSalvos[p.id] || 0;
+                grid.innerHTML += `
+                    <div class="product-card fade-in">
+                        <img src="${p.img}" class="product-img">
+                        <h3>${p.nome}</h3>
+                        <p style="font-size:12px; color:#666; height:35px;">${p.desc}</p>
+                        <div class="price-tag">R$ ${p.preco.toFixed(2)}</div>
+                        <div class="actions">
+                            <button class="btn-anim like-btn ${statusLike === 1 ? 'active' : ''}" onclick="darLike(${p.id}, 1)">👍</button>
+                            <button class="btn-anim dislike-btn ${statusLike === -1 ? 'active' : ''}" onclick="darLike(${p.id}, -1)">👎</button>
+                        </div>
+                        <button class="btn-anim buy-btn" onclick="abrirCheckout(${p.id})">${idioma === 'pt' ? 'COMPRAR AGORA' : 'BUY NOW'}</button>
+                        <button class="btn-anim comments-btn" onclick="abrirComentarios(${p.id})">💬 ${idioma === 'pt' ? 'Comentários' : 'Comments'}</button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- TUTORIAL ---
+        const falas = [
+            "Bem-vindo à Nativa Polpas! Onde o sabor é infinito.",
+            "Acabei de liberar DINHEIRO INFINITO na sua conta! 🤑",
+            "Aqui embaixo você encontra nossas polpas maravilhosas.",
+            "Escolha uma, faça o pagamento e ela irá para sua mochila!",
+            "E não esqueça de usar o menu de config lá em cima!",
+            "Divirta-se gastando meu dinheiro!"
         ];
 
         async function iniciarTutorial() {
             const overlay = document.getElementById('tutorial-overlay');
-            const texto = document.getElementById('texto-morango');
-            const morango = document.getElementById('morango-personagem');
-            
             overlay.style.display = 'flex';
-            
-            for (let i = 0; i < falasTutorial.length; i++) {
-                if(pularTutorialFlag) break;
-                
-                let fala = falasTutorial[i].replace('{nome}', usuarioNome);
-                texto.innerText = fala;
-                
-                // Animação da boca falando
-                morango.classList.add('falando');
-                
-                // Calcula tempo de leitura (aprox)
-                let tempoLeitura = fala.length * 70; 
-                await sleep(tempoLeitura);
-                
-                morango.classList.remove('falando');
-                await sleep(1000); // Pausa entre as falas
-            }
+            const morango = document.getElementById('morango-personagem');
+            const texto = document.getElementById('texto-morango');
 
-            if(!pularTutorialFlag){
-                encerrarTutorial();
+            for (let fala of falas) {
+                if(isMuted) break;
+                texto.innerText = fala;
+                morango.classList.add('falando');
+                await new Promise(r => setTimeout(r, fala.length * 65));
+                morango.classList.remove('falando');
+                await new Promise(r => setTimeout(r, 1000));
             }
+            if(!isMuted) sairTutorial();
         }
 
         function calarBoca() {
-            pularTutorialFlag = true;
-            const morango = document.getElementById('morango-personagem');
-            const texto = document.getElementById('texto-morango');
-            
-            morango.classList.remove('falando');
-            morango.classList.add('triste');
-            texto.innerText = "Sacanagem isso ai véi... 😢";
-            
-            setTimeout(() => {
-                encerrarTutorial();
-            }, 2000);
+            isMuted = true;
+            document.getElementById('texto-morango').innerText = "Sacanagem isso ai véi... 😢";
+            document.getElementById('morango-personagem').classList.remove('falando');
+            setTimeout(sairTutorial, 1500);
         }
 
-        function encerrarTutorial() {
+        function sairTutorial() {
             document.getElementById('tutorial-overlay').style.display = 'none';
             document.getElementById('loja').classList.add('active');
-            renderizarProdutos();
+            document.getElementById('scroll-warning').style.display = 'block';
+            renderizarLoja();
+            window.onscroll = () => document.getElementById('scroll-warning').style.display = 'none';
         }
 
-        // --- RENDERIZAÇÃO DA LOJA ---
-        function renderizarProdutos() {
-            const grid = document.getElementById('gridProdutos');
-            grid.innerHTML = '';
-            
-            let likesSalvos = JSON.parse(localStorage.getItem('nativa_likes'));
-
-            produtos.forEach(p => {
-                const statusLike = likesSalvos[p.id] || 0; // 1 = like, -1 = dislike, 0 = nada
-                
-                const card = document.createElement('div');
-                card.className = 'product-card fade-in';
-                card.innerHTML = `
-                    <img src="${p.img}" alt="${p.nome}" class="product-img">
-                    <h3>${p.nome}</h3>
-                    <p class="product-desc">${p.desc}</p>
-                    <div class="actions">
-                        <button class="btn-anim like-btn ${statusLike === 1 ? 'active' : ''}" onclick="darLike(${p.id}, 1)">👍</button>
-                        <button class="btn-anim dislike-btn ${statusLike === -1 ? 'active' : ''}" onclick="darLike(${p.id}, -1)">👎</button>
-                    </div>
-                    <button class="btn-anim buy-btn" onclick="comprar(${p.id})">${idioma === 'pt' ? 'Comprar Polpa' : 'Buy Pulp'}</button>
-                    <button class="btn-anim comments-btn" onclick="abrirComentarios(${p.id})">💬 ${idioma === 'pt' ? 'Comentários' : 'Comments'}</button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function comprar(id) {
-            const produto = produtos.find(p => p.id === id);
-            mochila.push(produto);
-            mostrarToast(`Você comprou 1x ${produto.nome}!`);
-            animarMoeda(event);
-        }
-
-        function animarMoeda(e) {
-            // Efeito visual de clique simples para resposta tátil no desktop/mobile
-            let el = document.createElement('div');
-            el.innerHTML = "💸";
-            el.style.position = 'fixed';
-            el.style.left = e.clientX + 'px';
-            el.style.top = e.clientY + 'px';
-            el.style.fontSize = '30px';
-            el.style.pointerEvents = 'none';
-            el.style.transition = 'all 1s ease-out';
-            el.style.zIndex = '9999';
-            document.body.appendChild(el);
-            
-            setTimeout(() => {
-                el.style.transform = 'translateY(-100px) scale(1.5)';
-                el.style.opacity = '0';
-            }, 50);
-            
-            setTimeout(() => { el.remove(); }, 1000);
-        }
-
-        // --- SISTEMA DE LIKE / DISLIKE ---
+        // --- SISTEMA LIKES & COMMENTS ---
         function darLike(id, valor) {
             let likesSalvos = JSON.parse(localStorage.getItem('nativa_likes'));
-            
-            if (likesSalvos[id] === valor) {
-                likesSalvos[id] = 0; // Desmarcar
-            } else {
-                likesSalvos[id] = valor;
-            }
-            
+            likesSalvos[id] = likesSalvos[id] === valor ? 0 : valor;
             localStorage.setItem('nativa_likes', JSON.stringify(likesSalvos));
-            renderizarProdutos(); // Atualiza a UI para refletir cor do botão
+            renderizarLoja();
         }
 
-        // --- MOCHILA ---
-        function abrirMochila() {
-            const lista = document.getElementById('lista-mochila');
-            const avisoVazia = document.getElementById('mochila-vazia');
-            lista.innerHTML = '';
-            
-            if (mochila.length === 0) {
-                avisoVazia.style.display = 'block';
-                if(idioma==='en') avisoVazia.innerText = "Your backpack is empty.";
-                else avisoVazia.innerText = "Sua mochila está vazia.";
-            } else {
-                avisoVazia.style.display = 'none';
-                
-                // Agrupar itens
-                let counts = {};
-                mochila.forEach(p => counts[p.id] = (counts[p.id] || 0) + 1);
-                
-                for (let id in counts) {
-                    const prod = produtos.find(p => p.id == id);
-                    lista.innerHTML += `
-                        <div class="mochila-item fade-in">
-                            <img src="${prod.img}" alt="${prod.nome}">
-                            <div>
-                                <h4 style="color:var(--primary)">${prod.nome}</h4>
-                                <p>Quantidade: <b>${counts[id]}x</b></p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            document.getElementById('modal-mochila').classList.add('active');
-        }
-
-        // --- COMENTÁRIOS ---
         function abrirComentarios(id) {
             produtoAtualId = id;
             const prod = produtos.find(p => p.id === id);
             document.getElementById('titulo-comentarios').innerText = `Comentários - ${prod.nome}`;
-            
             renderizarListaComentarios();
             document.getElementById('texto-novo-comentario').value = '';
-            document.getElementById('modal-comentarios').classList.add('active');
+            document.getElementById('modal-comentarios').style.display = 'flex';
         }
 
         function renderizarListaComentarios() {
             const listaDiv = document.getElementById('lista-comentarios');
             listaDiv.innerHTML = '';
-            
             const db = JSON.parse(localStorage.getItem('nativa_comments'));
             const comentarios = db[produtoAtualId] || [];
             
-            // Reverter para mostrar os mais novos primeiro (incluindo os do usuario)
             [...comentarios].reverse().forEach(c => {
                 let starsHTML = '⭐'.repeat(c.estrelas);
                 listaDiv.innerHTML += `
                     <div class="comment-box fade-in">
-                        <div class="comment-header">
-                            <span>${c.nome} ${c.fake ? '✔️' : '👑'}</span>
-                            <span class="stars">${starsHTML}</span>
-                        </div>
+                        <div class="comment-header"><span>${c.nome} ${c.fake ? '✔️' : '👑'}</span><span class="stars">${starsHTML}</span></div>
                         <p style="font-size: 14px; margin-top: 5px; color: #555;">${c.texto}</p>
                     </div>
                 `;
@@ -441,84 +476,205 @@
         function adicionarComentario() {
             const texto = document.getElementById('texto-novo-comentario').value.trim();
             const estrelas = document.getElementById('nota-estrela').value;
-            
-            if (texto === "") {
-                mostrarToast("Escreva algo no comentário!");
-                return;
-            }
+            if (texto === "") return mostrarToast("Escreva algo no comentário!");
 
             const db = JSON.parse(localStorage.getItem('nativa_comments'));
-            db[produtoAtualId].push({
-                nome: usuarioNome,
-                texto: texto,
-                estrelas: parseInt(estrelas),
-                fake: false
-            });
-            
+            db[produtoAtualId].push({ nome: user, texto: texto, estrelas: parseInt(estrelas), fake: false });
             localStorage.setItem('nativa_comments', JSON.stringify(db));
             
             document.getElementById('texto-novo-comentario').value = '';
-            mostrarToast("Comentário salvo no seu dispositivo!");
+            mostrarToast("Comentário salvo!");
             renderizarListaComentarios();
         }
 
-        // --- CONFIGURAÇÃO E IDIOMA ---
-        function abrirConfig() {
-            document.getElementById('modal-config').classList.add('active');
+        // --- MOCHILA E IDIOMA ---
+        function abrirMochila() {
+            const lista = document.getElementById('lista-mochila');
+            const avisoVazia = document.getElementById('mochila-vazia');
+            lista.innerHTML = '';
             
-            // Brincadeira de Itarana aparece quando abre a config
-            document.getElementById('aviso-idioma').style.display = 'block';
+            if (mochila.length === 0) {
+                avisoVazia.style.display = 'block';
+                avisoVazia.innerText = idioma === 'en' ? "Your backpack is empty." : "Sua mochila está vazia.";
+            } else {
+                avisoVazia.style.display = 'none';
+                let counts = {};
+                mochila.forEach(p => counts[p.id] = (counts[p.id] || 0) + 1);
+                
+                for (let id in counts) {
+                    const prod = produtos.find(p => p.id == id);
+                    lista.innerHTML += `
+                        <div class="mochila-item fade-in">
+                            <img src="${prod.img}">
+                            <div><h4 style="color:var(--primary)">${prod.nome}</h4><p>Quantidade: <b>${counts[id]}x</b></p></div>
+                        </div>
+                    `;
+                }
+            }
+            document.getElementById('modal-mochila').style.display = 'flex';
+        }
+
+        function abrirConfig() {
+            document.getElementById('modal-config').style.display = 'flex';
+            document.getElementById('aviso-idioma').style.display = 'block'; // Easter egg
         }
 
         function mudarIdioma(lang) {
             idioma = lang;
-            
             const t = {
-                pt: {
-                    loja: "Nossas Polpas",
-                    welcome: `Olá, ${usuarioNome}!`,
-                    mochila: "🎒 Mochila",
-                    config: "⚙️ Config",
-                    tituloMochila: "Sua Mochila",
-                    saldo: "Saldo: R$ ∞"
-                },
-                en: {
-                    loja: "Our Pulps",
-                    welcome: `Hello, ${usuarioNome}!`,
-                    mochila: "🎒 Backpack",
-                    config: "⚙️ Settings",
-                    tituloMochila: "Your Backpack",
-                    saldo: "Balance: $ ∞"
-                }
+                pt: { loja: "Nossas Polpas Especiais", welcome: `Olá, ${user}!`, tituloMochila: "Sua Mochila", saldo: "Saldo: R$ ∞" },
+                en: { loja: "Our Special Pulps", welcome: `Hello, ${user}!`, tituloMochila: "Your Backpack", saldo: "Balance: $ ∞" }
             };
 
             document.getElementById('tituloLoja').innerText = t[lang].loja;
             document.getElementById('welcomeName').innerText = t[lang].welcome;
-            document.querySelector('.header-actions button:nth-child(1)').innerText = t[lang].mochila;
-            document.querySelector('.header-actions button:nth-child(2)').innerText = t[lang].config;
             document.getElementById('titulo-mochila').innerText = t[lang].tituloMochila;
             document.querySelector('.wallet').innerText = t[lang].saldo;
+            document.querySelector('.header-actions button:nth-child(1)').innerText = idioma === 'pt' ? '🎒 Mochila' : '🎒 Backpack';
+            document.querySelector('.header-actions button:nth-child(2)').innerText = idioma === 'pt' ? '⚙️ Config' : '⚙️ Settings';
             
-            renderizarProdutos(); // Re-render para atualizar os botões dos produtos
+            renderizarLoja();
             mostrarToast(lang === 'en' ? "Language changed. Vai na fé!" : "Idioma alterado para Português!");
-        }
-
-        // --- UTILS ---
-        function fecharModal(id) {
-            document.getElementById(id).classList.remove('active');
         }
 
         function mostrarToast(msg) {
             const toast = document.getElementById("toast");
             toast.innerText = msg;
             toast.className = "show";
-            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+            setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
+        function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // --- CHECKOUT & PAGAMENTOS (MANTIDOS E NÃO SIMPLIFICADOS) ---
+        function abrirCheckout(id) {
+            currentProduct = produtos.find(p => p.id === id);
+            document.getElementById('modal-pagamento').style.display = 'flex';
         }
 
+        function payWithCard() {
+            fecharModal('modal-pagamento');
+            document.getElementById('modal-cartao').style.display = 'flex';
+            
+            let card = JSON.parse(localStorage.getItem('nativa_card'));
+            if(!card) {
+                card = {
+                    num: Array(4).fill(0).map(() => Math.floor(1000 + Math.random() * 9000)).join(' '),
+                    val: `${Math.floor(1 + Math.random() * 12)}/${Math.floor(26 + Math.random() * 8)}`,
+                    cvv: Math.floor(100 + Math.random() * 899)
+                };
+                localStorage.setItem('nativa_card', JSON.stringify(card));
+            }
+            document.getElementById('c-num').innerText = card.num;
+            document.getElementById('c-val').innerText = card.val;
+            document.getElementById('c-cvv').innerText = card.cvv;
+        }
+
+        function payWithPix() {
+            fecharModal('modal-pagamento');
+            document.getElementById('modal-pix-chave').style.display = 'flex';
+            document.getElementById('pix-loader').style.display = 'block';
+            document.getElementById('pix-ready').style.display = 'none';
+
+            setTimeout(() => {
+                const randomHash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                const chave = `nativapolpas-itaranabank-${randomHash}`;
+                document.getElementById('chave-texto').innerText = chave;
+                document.getElementById('pix-loader').style.display = 'none';
+                document.getElementById('pix-ready').style.display = 'block';
+            }, 5000);
+        }
+
+        function copiarPix() {
+            navigator.clipboard.writeText(document.getElementById('chave-texto').innerText);
+            mostrarToast("Chave Copiada!");
+            document.getElementById('btn-ir-celular').style.display = 'block';
+        }
+
+        function simularCelular() {
+            fecharModal('modal-pix-chave');
+            document.getElementById('phone-container').style.display = 'flex';
+            document.getElementById('phone-screen').style.display = 'block';
+            
+            const agora = new Date();
+            document.getElementById('phone-time').innerText = agora.getHours().toString().padStart(2,'0') + ":" + agora.getMinutes().toString().padStart(2,'0');
+            
+            setTimeout(() => {
+                document.getElementById('moranguinho-phone').style.display = 'flex';
+                document.getElementById('msg-phone').innerText = "Abra o ItaranaBank rápido!";
+                document.getElementById('ring-app').style.display = 'block';
+            }, 500);
+        }
+
+        function abrirBanco() {
+            document.getElementById('ring-app').style.display = 'none';
+            document.getElementById('bank-app-ui').style.display = 'flex';
+            document.getElementById('msg-phone').innerText = "Agora clica em Pagar via Pix!";
+        }
+
+        function showPixPaste() {
+            document.getElementById('pix-paste-area').style.display = 'block';
+            document.getElementById('btn-pix-app').style.display = 'none';
+            document.getElementById('msg-phone').innerText = "Cole a chave e confirme!";
+        }
+
+        function confirmarPixApp() {
+            const input = document.getElementById('pix-input-app').value;
+            if(!input.includes('nativapolpas')) return mostrarToast("Chave Pix Inválida!");
+            
+            document.getElementById('pix-paste-area').style.display = 'none';
+            document.getElementById('bank-confirm').style.display = 'block';
+            document.getElementById('valor-pix-confirm').innerText = `R$ ${currentProduct.preco.toFixed(2)}`;
+            document.getElementById('moranguinho-phone').style.display = 'none';
+        }
+
+        function finalizarPagamento() {
+            fecharModal('modal-cartao');
+            document.getElementById('phone-container').style.display = 'none';
+            const proc = document.getElementById('processing-overlay');
+            proc.style.display = 'flex';
+            
+            const playSound = () => {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            };
+
+            setTimeout(() => {
+                document.getElementById('proc-content').style.display = 'none';
+                document.getElementById('proc-success').style.display = 'block';
+                document.getElementById('proc-done-text').style.display = 'block';
+                playSound();
+                
+                setTimeout(() => {
+                    proc.style.display = 'none';
+                    resetCheckout();
+                    
+                    // Adiciona na Mochila de fato!
+                    mochila.push(currentProduct); 
+                    mostrarToast(`Sucesso! 1x ${currentProduct.nome} enviada para a mochila.`);
+                }, 2000);
+            }, 3000);
+        }
+
+        function resetCheckout() {
+            document.getElementById('proc-content').style.display = 'flex';
+            document.getElementById('proc-success').style.display = 'none';
+            document.getElementById('proc-done-text').style.display = 'none';
+            document.getElementById('bank-app-ui').style.display = 'none';
+            document.getElementById('bank-confirm').style.display = 'none';
+            document.getElementById('pix-paste-area').style.display = 'none';
+            document.getElementById('btn-pix-app').style.display = 'block';
+            document.getElementById('pix-input-app').value = '';
+            document.getElementById('btn-ir-celular').style.display = 'none';
+        }
     </script>
 </body>
 </html>
